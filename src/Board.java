@@ -22,7 +22,7 @@ public class Board extends JPanel implements ActionListener {
     private final int B_HEIGHT = 450;
     private final int DOT_SIZE = 15;
     private final int ALL_DOTS = 900;
-    private final int DELAY = 150;
+    private final int DELAY = 1500;
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -38,7 +38,7 @@ public class Board extends JPanel implements ActionListener {
     private boolean inGame = true;
 
     private Timer timer;
-    private Image ball;
+    private Image body;
     private Image apple;
     private Image head;
 
@@ -56,7 +56,7 @@ public class Board extends JPanel implements ActionListener {
     private void loadImages() {
 
         ImageIcon iid = new ImageIcon("body.png");
-        ball = iid.getImage();
+        body = iid.getImage();
 
         ImageIcon iia = new ImageIcon("apple.png");
         apple = iia.getImage();
@@ -97,7 +97,7 @@ public class Board extends JPanel implements ActionListener {
                 if (z == 0) {
                     g.drawImage(head, x[z], y[z], this);
                 } else {
-                    g.drawImage(ball, x[z], y[z], this);
+                    g.drawImage(body, x[z], y[z], this);
                 }
             }
 
@@ -167,19 +167,23 @@ public class Board extends JPanel implements ActionListener {
         }
 
         if (y[0] >= B_HEIGHT) {
-            inGame = false;
+            //inGame = false;
+        	y[0] = 0;
         }
 
         if (y[0] < 0) {
-            inGame = false;
+            //inGame = false;
+        	y[0] = B_HEIGHT;
         }
 
         if (x[0] >= B_WIDTH) {
-            inGame = false;
+            //inGame = false;
+        	x[0] = 0;
         }
 
         if (x[0] < 0) {
-            inGame = false;
+            //inGame = false;
+        	x[0] = B_WIDTH;
         }
         
         if(!inGame) {
@@ -200,8 +204,8 @@ public class Board extends JPanel implements ActionListener {
 
         if (inGame) {
 
-            checkApple();
             checkCollision();
+            checkApple();
             move();
         }
 
@@ -219,24 +223,25 @@ public class Board extends JPanel implements ActionListener {
                 leftDirection = true;
                 upDirection = false;
                 downDirection = false;
+                rightDirection = false;
             }
-
-            if ((key == KeyEvent.VK_RIGHT) && (!leftDirection)) {
+            else if ((key == KeyEvent.VK_RIGHT) && (!leftDirection)) {
                 rightDirection = true;
                 upDirection = false;
                 downDirection = false;
+                leftDirection = false;
             }
-
-            if ((key == KeyEvent.VK_UP) && (!downDirection)) {
+            else if ((key == KeyEvent.VK_UP) && (!downDirection)) {
                 upDirection = true;
                 rightDirection = false;
                 leftDirection = false;
+                downDirection = false;
             }
-
-            if ((key == KeyEvent.VK_DOWN) && (!upDirection)) {
+            else if ((key == KeyEvent.VK_DOWN) && (!upDirection)) {
                 downDirection = true;
                 rightDirection = false;
                 leftDirection = false;
+                upDirection = false;
             }
         }
     }
