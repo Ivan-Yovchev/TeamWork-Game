@@ -18,11 +18,11 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class Board extends JPanel implements ActionListener {
 
-    private final int B_WIDTH = 450;
-    private final int B_HEIGHT = 450;
-    private final int DOT_SIZE = 15;
+    private final int B_WIDTH = 600;
+    private final int B_HEIGHT = 600;
+    private final int DOT_SIZE = 20;
     private final int ALL_DOTS = 900;
-    private final int DELAY = 150;
+    private final int DELAY = 350;
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -61,7 +61,7 @@ public class Board extends JPanel implements ActionListener {
         ImageIcon iia = new ImageIcon("apple.png");
         food = iia.getImage();
 
-        ImageIcon iih = new ImageIcon("head.png");
+        ImageIcon iih = new ImageIcon("headRight.png");
         head = iih.getImage();
     }
 
@@ -70,8 +70,8 @@ public class Board extends JPanel implements ActionListener {
         dots = 3;
 
         for (int z = 0; z < dots; z++) {
-            x[z] = 75 - z*DOT_SIZE;
-            y[z] = 75;
+            x[z] = 80 - z*DOT_SIZE;
+            y[z] = 80;
         }
 
         locateApple();
@@ -204,8 +204,8 @@ public class Board extends JPanel implements ActionListener {
     		case 2: icon = new ImageIcon("pear.png"); food = icon.getImage(); break;
 		}
     	
-    	apple_x  = rand.nextInt(B_WIDTH/15) * 15;
-    	apple_y  = rand.nextInt(B_HEIGHT/15) * 15;
+    	apple_x  = rand.nextInt(B_WIDTH/DOT_SIZE) * DOT_SIZE;
+    	apple_y  = rand.nextInt(B_HEIGHT/DOT_SIZE) * DOT_SIZE;
     }
 
     @Override
@@ -233,24 +233,36 @@ public class Board extends JPanel implements ActionListener {
                 upDirection = false;
                 downDirection = false;
                 rightDirection = false;
+                
+                ImageIcon headIcon = new ImageIcon("headLeft.png");
+                head = headIcon.getImage();
             }
             else if ((key == KeyEvent.VK_RIGHT) && (!leftDirection)) {
                 rightDirection = true;
                 upDirection = false;
                 downDirection = false;
                 leftDirection = false;
+                
+                ImageIcon headIcon = new ImageIcon("headRight.png");
+                head = headIcon.getImage();
             }
             else if ((key == KeyEvent.VK_UP) && (!downDirection)) {
                 upDirection = true;
                 rightDirection = false;
                 leftDirection = false;
                 downDirection = false;
+                
+                ImageIcon headIcon = new ImageIcon("headUp.png");
+                head = headIcon.getImage();
             }
             else if ((key == KeyEvent.VK_DOWN) && (!upDirection)) {
                 downDirection = true;
                 rightDirection = false;
                 leftDirection = false;
                 upDirection = false;
+                
+                ImageIcon headIcon = new ImageIcon("headDown.png");
+                head = headIcon.getImage();
             }
         }
     }
