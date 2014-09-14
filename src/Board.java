@@ -18,11 +18,11 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class Board extends JPanel implements ActionListener {
 
-    private final int B_WIDTH = 600;
-    private final int B_HEIGHT = 600;
+    private final int gameAreaWidth = 600;
+    private final int gameAreaHeight = 600;
     private final int DOT_SIZE = 20;
     private final int ALL_DOTS = 900;
-    private final int DELAY = 350;
+    private final int speed = 200;
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -48,7 +48,7 @@ public class Board extends JPanel implements ActionListener {
         setBackground(Color.black);
         setFocusable(true);
 
-        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
+        setPreferredSize(new Dimension(gameAreaWidth, gameAreaHeight));
         loadImages();
         initGame();
     }
@@ -76,7 +76,7 @@ public class Board extends JPanel implements ActionListener {
 
         locateApple();
 
-        timer = new Timer(DELAY, this);
+        timer = new Timer(speed, this);
         timer.start();
     }
 
@@ -117,7 +117,7 @@ public class Board extends JPanel implements ActionListener {
 
         g.setColor(Color.white);
         g.setFont(small);
-        g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
+        g.drawString(msg, (gameAreaWidth - metr.stringWidth(msg)) / 2, gameAreaHeight / 2);
     }
 
     private void checkApple() {
@@ -166,24 +166,24 @@ public class Board extends JPanel implements ActionListener {
             }
         }
 
-        if (y[0] >= B_HEIGHT) {
+        if (y[0] >= gameAreaHeight) {
             //inGame = false;
         	y[0] = 0;
         }
 
         if (y[0] < 0) {
             //inGame = false;
-        	y[0] = B_HEIGHT;
+        	y[0] = gameAreaHeight;
         }
 
-        if (x[0] >= B_WIDTH) {
+        if (x[0] >= gameAreaWidth) {
             //inGame = false;
         	x[0] = 0;
         }
 
         if (x[0] < 0) {
             //inGame = false;
-        	x[0] = B_WIDTH;
+        	x[0] = gameAreaWidth;
         }
         
         if(!inGame) {
@@ -204,8 +204,8 @@ public class Board extends JPanel implements ActionListener {
     		case 2: icon = new ImageIcon("pear.png"); food = icon.getImage(); break;
 		}
     	
-    	apple_x  = rand.nextInt(B_WIDTH/DOT_SIZE) * DOT_SIZE;
-    	apple_y  = rand.nextInt(B_HEIGHT/DOT_SIZE) * DOT_SIZE;
+    	apple_x  = rand.nextInt(gameAreaWidth/DOT_SIZE) * DOT_SIZE;
+    	apple_y  = rand.nextInt(gameAreaHeight/DOT_SIZE) * DOT_SIZE;
     }
 
     @Override
