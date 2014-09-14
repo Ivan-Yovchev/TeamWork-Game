@@ -39,7 +39,7 @@ public class Board extends JPanel implements ActionListener {
 
     private Timer timer;
     private Image body;
-    private Image apple;
+    private Image food;
     private Image head;
 
     public Board() {
@@ -59,7 +59,7 @@ public class Board extends JPanel implements ActionListener {
         body = iid.getImage();
 
         ImageIcon iia = new ImageIcon("apple.png");
-        apple = iia.getImage();
+        food = iia.getImage();
 
         ImageIcon iih = new ImageIcon("head.png");
         head = iih.getImage();
@@ -91,7 +91,7 @@ public class Board extends JPanel implements ActionListener {
         
         if (inGame) {
 
-            g.drawImage(apple, apple_x, apple_y, this);
+            g.drawImage(food, apple_x, apple_y, this);
 
             for (int z = 0; z < dots; z++) {
                 if (z == 0) {
@@ -194,6 +194,15 @@ public class Board extends JPanel implements ActionListener {
     private void locateApple() {
 
     	Random rand = new Random();
+    	
+    	int choosePicture = rand.nextInt(3);
+    	ImageIcon icon;
+    	
+    	switch (choosePicture) {
+    		case 0: icon = new ImageIcon("apple.png"); food = icon.getImage(); break;
+    		case 1: icon = new ImageIcon("cherry.png"); food = icon.getImage(); break;
+    		case 2: icon = new ImageIcon("pear.png"); food = icon.getImage(); break;
+		}
     	
     	apple_x  = rand.nextInt(B_WIDTH/15) * 15;
     	apple_y  = rand.nextInt(B_HEIGHT/15) * 15;
