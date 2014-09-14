@@ -195,13 +195,16 @@ public class Board extends JPanel implements ActionListener {
 
     	Random rand = new Random();
     	
-    	int choosePicture = rand.nextInt(3);
+    	int choosePicture = rand.nextInt(6);
     	ImageIcon icon;
     	
     	switch (choosePicture) {
-    		case 0: icon = new ImageIcon("apple.png"); food = icon.getImage(); break;
+    		case 0: icon = new ImageIcon("lemon.png"); food = icon.getImage(); break;
     		case 1: icon = new ImageIcon("cherry.png"); food = icon.getImage(); break;
     		case 2: icon = new ImageIcon("pear.png"); food = icon.getImage(); break;
+    		case 3: icon = new ImageIcon("banana.png"); food = icon.getImage(); break;
+    		case 4: icon = new ImageIcon("apple.png"); food = icon.getImage(); break;
+    		case 5: icon = new ImageIcon("strawberry.png"); food = icon.getImage(); break;
 		}
     	
     	apple_x  = rand.nextInt(gameAreaWidth/DOT_SIZE) * DOT_SIZE;
