@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -30,8 +31,13 @@ public class Board extends JPanel implements ActionListener {
     private final int y[] = new int[ALL_DOTS];
 
     private int dots;
-    private int apple_x;
-    private int apple_y;
+    private int foodX;
+    private int foodY;
+    private int foodCounter = 0;
+    private int bonusX;
+    private int bonusY;
+    private boolean getBonus = false;
+    private long startTime = 0;
 
     private boolean leftDirection = false;
     private boolean rightDirection = true;
@@ -39,11 +45,14 @@ public class Board extends JPanel implements ActionListener {
     private boolean downDirection = false;
     private boolean inGame = true;
 
+    private long score = 0;
+    
     private Timer timer;
     private Image body;
     private Image food;
     private Image head;
     private Image border;
+    private Image bonus;
 
     public Board() {
 
@@ -97,7 +106,7 @@ public class Board extends JPanel implements ActionListener {
         
         if (inGame) {
 
-            g.drawImage(food, apple_x, apple_y, this);
+            g.drawImage(food, foodX, foodY, this);
 
             for (int z = 0; z < dots; z++) {
                 if (z == 0) {
@@ -107,12 +116,40 @@ public class Board extends JPanel implements ActionListener {
                 }
             }
 
-            for (int i = 0; i < windowWidth; i++) {
-				g.drawImage(border, i, windowHeight - gameAreaHeight - 20, this);
+            // draw information field
+            for (int j = 1; j < 15; j++) {
+            	for (int i = 0; i < windowWidth; i+=17) {
+    				g.drawImage(border, i, windowHeight - gameAreaHeight - j*15, this);
+    			}
 			}
             
-            g.setColor(Color.red);
-            g.drawString("Draw game Info board here", 20, 40);
+            
+            if(getBonus == true){
+            	
+            	long endTime = System.currentTimeMillis();
+            	int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(endTime - startTime);
+            	
+            	if(seconds < 7){
+            		
+            		String msg = "GET BONUS !!! Time: " + (7 - seconds);
+                    Font small = new Font("Arial", Font.BOLD, 20);
+                    g.setColor(Color.red);
+                    g.setFont(small);
+                    g.drawString(msg, 370, 20);
+            		
+            		g.drawImage(bonus,bonusX,bonusY,this);
+            	}
+            	else{
+            		getBonus = false;
+            	}
+            	
+            }
+            
+            String msg = "Score: " + score;
+            Font small = new Font("Arial", Font.BOLD, 18);
+            g.setColor(Color.white);
+            g.setFont(small);
+            g.drawString(msg, 480, 70);
             
             Toolkit.getDefaultToolkit().sync();
 
@@ -135,18 +172,52 @@ public class Board extends JPanel implements ActionListener {
 
     private void checkApple() {
 
-        if ((x[0] == apple_x) && (y[0] == apple_y )) {
+        if ((x[0] == foodX) && (y[0] == foodY )) {
 
             dots++;
             locateApple();
-        }
-//        else {
-//			System.out.println("apple x: " + apple_x + " apple y: "+apple_y);
-//			System.out.println("snake x: " + x[0] + " snake y: " + y[0]);
-//		}
+            score += 50;
+            foodCounter++;
+            
+            if(foodCounter == 3){
+            	locateBonus();
+            }
+        } 
     }
 
-    private void move() {
+    private void checkBonus(){
+    	
+    	if(getBonus == true && (x[0]  == bonusX && y[0] == bonusY)){
+
+        	getBonus = false;
+        	dots++;
+        	score += 100;
+        }
+    	
+    }
+    
+    private void locateBonus() {
+    	
+    	Random rand = new Random();
+    	
+    	ImageIcon icon = new ImageIcon("bonus.png");
+    	bonus = icon.getImage();
+    	
+    	bonusX  = rand.nextInt(gameAreaWidth/DOT_SIZE) * DOT_SIZE;
+    	bonusY  = rand.nextInt(gameAreaHeight/DOT_SIZE) * DOT_SIZE + (windowHeight - gameAreaHeight);
+    	
+    	while((bonusX == foodX) || (bonusY == foodY)){
+    		bonusX  = rand.nextInt(gameAreaWidth/DOT_SIZE) * DOT_SIZE;
+        	bonusY  = rand.nextInt(gameAreaHeight/DOT_SIZE) * DOT_SIZE + (windowHeight - gameAreaHeight);
+    	}
+    	
+    	startTime = System.currentTimeMillis();
+    	getBonus = true;
+    	foodCounter = 0;
+    	
+	}
+
+	private void move() {
 
         for (int z = dots; z > 0; z--) {
             x[z] = x[(z - 1)];
@@ -220,8 +291,8 @@ public class Board extends JPanel implements ActionListener {
     		case 5: icon = new ImageIcon("strawberry.png"); food = icon.getImage(); break;
 		}
     	
-    	apple_x  = rand.nextInt(gameAreaWidth/DOT_SIZE) * DOT_SIZE;
-    	apple_y  = rand.nextInt(gameAreaHeight/DOT_SIZE) * DOT_SIZE + (windowHeight - gameAreaHeight) ;
+    	foodX  = rand.nextInt(gameAreaWidth/DOT_SIZE) * DOT_SIZE;
+    	foodY  = rand.nextInt(gameAreaHeight/DOT_SIZE) * DOT_SIZE + (windowHeight - gameAreaHeight) ;
     }
 
     @Override
@@ -230,6 +301,7 @@ public class Board extends JPanel implements ActionListener {
         if (inGame) {
 
             checkCollision();
+            checkBonus();
             checkApple();
             move();
         }
