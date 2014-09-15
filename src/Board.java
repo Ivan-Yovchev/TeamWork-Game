@@ -20,6 +20,8 @@ public class Board extends JPanel implements ActionListener {
 
     private final int gameAreaWidth = 600;
     private final int gameAreaHeight = 600;
+    private final int windowWidth = 600;
+    private final int windowHeight = 700;
     private final int DOT_SIZE = 20;
     private final int ALL_DOTS = 900;
     private final int speed = 200;
@@ -41,6 +43,7 @@ public class Board extends JPanel implements ActionListener {
     private Image body;
     private Image food;
     private Image head;
+    private Image border;
 
     public Board() {
 
@@ -48,21 +51,24 @@ public class Board extends JPanel implements ActionListener {
         setBackground(Color.black);
         setFocusable(true);
 
-        setPreferredSize(new Dimension(gameAreaWidth, gameAreaHeight));
+        setPreferredSize(new Dimension(windowWidth, windowHeight));
         loadImages();
         initGame();
     }
 
     private void loadImages() {
 
-        ImageIcon iid = new ImageIcon("body.png");
-        body = iid.getImage();
+        ImageIcon bImg = new ImageIcon("body.png");
+        body = bImg.getImage();
 
-        ImageIcon iia = new ImageIcon("apple.png");
-        food = iia.getImage();
+        ImageIcon fImg = new ImageIcon("apple.png");
+        food = fImg.getImage();
 
-        ImageIcon iih = new ImageIcon("headRight.png");
-        head = iih.getImage();
+        ImageIcon hImg = new ImageIcon("headRight.png");
+        head = hImg.getImage();
+        
+        ImageIcon borderImg = new ImageIcon("border.png");
+        border = borderImg.getImage();
     }
 
     private void initGame() {
@@ -70,8 +76,8 @@ public class Board extends JPanel implements ActionListener {
         dots = 3;
 
         for (int z = 0; z < dots; z++) {
-            x[z] = 80 - z*DOT_SIZE;
-            y[z] = 80;
+            x[z] = 180 - z*DOT_SIZE;
+            y[z] = 180;
         }
 
         locateApple();
@@ -101,6 +107,13 @@ public class Board extends JPanel implements ActionListener {
                 }
             }
 
+            for (int i = 0; i < windowWidth; i++) {
+				g.drawImage(border, i, windowHeight - gameAreaHeight - 20, this);
+			}
+            
+            g.setColor(Color.red);
+            g.drawString("Draw game Info board here", 20, 40);
+            
             Toolkit.getDefaultToolkit().sync();
 
         } else {
@@ -166,14 +179,14 @@ public class Board extends JPanel implements ActionListener {
             }
         }
 
-        if (y[0] >= gameAreaHeight) {
+        if (y[0] == (windowHeight - gameAreaHeight) + gameAreaHeight) {
             //inGame = false;
-        	y[0] = 0;
+        	y[0] = windowHeight - gameAreaHeight;
         }
 
-        if (y[0] < 0) {
+        if (y[0] < windowHeight - gameAreaHeight) {
             //inGame = false;
-        	y[0] = gameAreaHeight;
+        	y[0] = (windowHeight - gameAreaHeight) + gameAreaHeight;
         }
 
         if (x[0] >= gameAreaWidth) {
@@ -208,7 +221,7 @@ public class Board extends JPanel implements ActionListener {
 		}
     	
     	apple_x  = rand.nextInt(gameAreaWidth/DOT_SIZE) * DOT_SIZE;
-    	apple_y  = rand.nextInt(gameAreaHeight/DOT_SIZE) * DOT_SIZE;
+    	apple_y  = rand.nextInt(gameAreaHeight/DOT_SIZE) * DOT_SIZE + (windowHeight - gameAreaHeight) ;
     }
 
     @Override
@@ -235,7 +248,6 @@ public class Board extends JPanel implements ActionListener {
                 leftDirection = true;
                 upDirection = false;
                 downDirection = false;
-                rightDirection = false;
                 
                 ImageIcon headIcon = new ImageIcon("headLeft.png");
                 head = headIcon.getImage();
@@ -244,7 +256,6 @@ public class Board extends JPanel implements ActionListener {
                 rightDirection = true;
                 upDirection = false;
                 downDirection = false;
-                leftDirection = false;
                 
                 ImageIcon headIcon = new ImageIcon("headRight.png");
                 head = headIcon.getImage();
@@ -253,7 +264,6 @@ public class Board extends JPanel implements ActionListener {
                 upDirection = true;
                 rightDirection = false;
                 leftDirection = false;
-                downDirection = false;
                 
                 ImageIcon headIcon = new ImageIcon("headUp.png");
                 head = headIcon.getImage();
@@ -262,7 +272,6 @@ public class Board extends JPanel implements ActionListener {
                 downDirection = true;
                 rightDirection = false;
                 leftDirection = false;
-                upDirection = false;
                 
                 ImageIcon headIcon = new ImageIcon("headDown.png");
                 head = headIcon.getImage();
