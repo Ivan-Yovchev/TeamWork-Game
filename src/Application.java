@@ -13,7 +13,7 @@ public class Application extends JFrame {
         setResizable(false);
         pack();
         
-        setTitle("Snakess");
+        setTitle("Snake");
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
