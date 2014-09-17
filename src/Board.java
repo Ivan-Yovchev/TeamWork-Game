@@ -137,7 +137,7 @@ public class Board extends JPanel implements ActionListener {
                     Font small = new Font("Arial", Font.BOLD, 20);
                     g.setColor(Color.red);
                     g.setFont(small);
-                    g.drawString(msg, 370, 20);
+                    g.drawString(msg, 270, 20);
             		
             		g.drawImage(bonus,bonusX,bonusY,this);
             	}
