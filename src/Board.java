@@ -38,6 +38,7 @@ public class Board extends JPanel implements ActionListener {
     private int bonusY;
     private boolean getBonus = false;
     private long startTime = 0;
+    private long gameStart = 0;
 
     private boolean leftDirection = false;
     private boolean rightDirection = true;
@@ -62,7 +63,8 @@ public class Board extends JPanel implements ActionListener {
 
         setPreferredSize(new Dimension(windowWidth, windowHeight));
         loadImages();
-        initGame();
+        inGame();
+        gameStart = System.nanoTime();
     }
 
     private void loadImages() {
@@ -80,7 +82,7 @@ public class Board extends JPanel implements ActionListener {
         border = borderImg.getImage();
     }
 
-    private void initGame() {
+    private void inGame() {
 
         dots = 3;
 
@@ -157,6 +159,16 @@ public class Board extends JPanel implements ActionListener {
 
             gameOver(g);
         }        
+        
+        
+       long time = System.nanoTime();
+        int currentTime = (int) TimeUnit.NANOSECONDS.toSeconds(time - gameStart);
+           String timer = "Timer: " + currentTime;
+           Font timerFont = new Font("Arial", Font.BOLD, 18);
+           g.setColor(Color.green);
+           g.setFont(timerFont);
+           g.drawString(timer, 50, 70);
+        
     }
 
     private void gameOver(Graphics g) {
@@ -316,7 +328,7 @@ public class Board extends JPanel implements ActionListener {
 
             int key = e.getKeyCode();
 
-            if ((key == KeyEvent.VK_LEFT) && (!rightDirection)) {
+            if ((key == KeyEvent.VK_LEFT) && (!rightDirection) && (key != KeyEvent.VK_RIGHT) && (key != KeyEvent.VK_UP) && (key != KeyEvent.VK_DOWN)) {
                 leftDirection = true;
                 upDirection = false;
                 downDirection = false;
@@ -324,7 +336,7 @@ public class Board extends JPanel implements ActionListener {
                 ImageIcon headIcon = new ImageIcon("headLeft.png");
                 head = headIcon.getImage();
             }
-            else if ((key == KeyEvent.VK_RIGHT) && (!leftDirection)) {
+            else if ((key == KeyEvent.VK_RIGHT) && (!leftDirection) && (key != KeyEvent.VK_LEFT) && (key != KeyEvent.VK_UP) && (key != KeyEvent.VK_DOWN)){
                 rightDirection = true;
                 upDirection = false;
                 downDirection = false;
@@ -332,7 +344,7 @@ public class Board extends JPanel implements ActionListener {
                 ImageIcon headIcon = new ImageIcon("headRight.png");
                 head = headIcon.getImage();
             }
-            else if ((key == KeyEvent.VK_UP) && (!downDirection)) {
+            else if ((key == KeyEvent.VK_UP) && (!downDirection) && (key != KeyEvent.VK_LEFT) && (key != KeyEvent.VK_RIGHT) && (key != KeyEvent.VK_DOWN)) {
                 upDirection = true;
                 rightDirection = false;
                 leftDirection = false;
@@ -340,7 +352,7 @@ public class Board extends JPanel implements ActionListener {
                 ImageIcon headIcon = new ImageIcon("headUp.png");
                 head = headIcon.getImage();
             }
-            else if ((key == KeyEvent.VK_DOWN) && (!upDirection)) {
+            else if ((key == KeyEvent.VK_DOWN) && (!upDirection) && (key != KeyEvent.VK_LEFT) && (key != KeyEvent.VK_RIGHT) && (key != KeyEvent.VK_UP)) {
                 downDirection = true;
                 rightDirection = false;
                 leftDirection = false;
