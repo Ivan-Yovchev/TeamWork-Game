@@ -31,12 +31,16 @@ public class Board extends JPanel implements ActionListener {
     private final int y[] = new int[ALL_DOTS];
 
     private int dots;
+    private int hearts = 3;
+    private int lives = 3;
     private int foodX;
     private int foodY;
     private int foodCounter = 0;
     private int bonusX;
     private int bonusY;
     private boolean getBonus = false;
+    private int lifeX;
+    private int lifeY;
     private long startTime = 0;
     private long gameStart = 0;
 
@@ -54,6 +58,8 @@ public class Board extends JPanel implements ActionListener {
     private Image head;
     private Image border;
     private Image bonus;
+    private Image heart;
+    private Image emptyHeart;
 
     public Board() {
 
@@ -80,8 +86,24 @@ public class Board extends JPanel implements ActionListener {
         
         ImageIcon borderImg = new ImageIcon("border.png");
         border = borderImg.getImage();
+        
+        ImageIcon heartImg = new ImageIcon("heart.png");
+        heart = heartImg.getImage();
+        
+        ImageIcon emptyHeartImg = new ImageIcon("emptyHeart.png");
+        emptyHeart = emptyHeartImg.getImage();
     }
 
+    private void restart(){
+    	
+    	dots = 3;
+
+        for (int z = 0; z < dots; z++) {
+            x[z] = 180 - z*DOT_SIZE;
+            y[z] = 180;
+        }
+    }
+    
     private void whilePlaying() {
 
         dots = 3;
@@ -125,6 +147,17 @@ public class Board extends JPanel implements ActionListener {
     			}
 			}
             
+            lifeX = windowWidth/2;
+        	lifeY = 55;            
+            for (int t = 0; t < lives; t++) {
+            	
+            	if(t < hearts){
+                    g.drawImage(heart, lifeX - t*DOT_SIZE, lifeY, this);
+            	}
+            	else{
+                    g.drawImage(emptyHeart, lifeX - t*DOT_SIZE, lifeY, this);
+            	}
+            }
             
             if(getBonus == true){
             	
@@ -135,9 +168,10 @@ public class Board extends JPanel implements ActionListener {
             		
             		String msg = "GET BONUS !!! Time: " + (7 - seconds);
                     Font small = new Font("Arial", Font.BOLD, 20);
+                    FontMetrics metr = getFontMetrics(small);
                     g.setColor(Color.red);
                     g.setFont(small);
-                    g.drawString(msg, 270, 20);
+                    g.drawString(msg, (windowWidth/2) -  (metr.stringWidth(msg)/2), 20);
             		
             		g.drawImage(bonus,bonusX,bonusY,this);
             	}
@@ -177,9 +211,15 @@ public class Board extends JPanel implements ActionListener {
         Font small = new Font("Helvetica", Font.BOLD, 14);
         FontMetrics metr = getFontMetrics(small);
 
+        long time = System.nanoTime();
+        int currentTime = (int) TimeUnit.NANOSECONDS.toSeconds(time - gameStart);
+        String msg2 = "You scored " + score + " points in " + currentTime + " seconds";
+        
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(msg, (gameAreaWidth - metr.stringWidth(msg)) / 2, gameAreaHeight / 2);
+        g.drawString(msg2, (gameAreaWidth - metr.stringWidth(msg2)) / 2, gameAreaHeight / 2 + 50);
+        
     }
 
     private void checkFruit() {
@@ -255,10 +295,14 @@ public class Board extends JPanel implements ActionListener {
 
     private void checkCollision() {
 
-        for (int z = dots; z > 0; z--) {
+        for (int z = 1; z < dots; z++) {
 
-            if ((z > 4) && (x[0] == x[z]) && (y[0] == y[z])) {
-                inGame = false;
+            if ((z > 3) && (x[0] == x[z]) && (y[0] == y[z])) {
+                 hearts--;
+                 restart();
+                 if(hearts == 0){
+                	 inGame = false;
+                 }
             }
         }
 
