@@ -89,7 +89,7 @@ public class Board extends JPanel implements ActionListener {
             y[z] = 180;
         }
 
-        locateApple();
+        locateFruit();
 
         timer = new Timer(speed, this);
         timer.start();
@@ -135,7 +135,7 @@ public class Board extends JPanel implements ActionListener {
                     Font small = new Font("Arial", Font.BOLD, 20);
                     g.setColor(Color.red);
                     g.setFont(small);
-                    g.drawString(msg, 370, 20);
+                    g.drawString(msg, 270, 20);
             		
             		g.drawImage(bonus,bonusX,bonusY,this);
             	}
@@ -170,12 +170,12 @@ public class Board extends JPanel implements ActionListener {
         g.drawString(msg, (gameAreaWidth - metr.stringWidth(msg)) / 2, gameAreaHeight / 2);
     }
 
-    private void checkApple() {
+    private void checkFruit() {
 
         if ((x[0] == foodX) && (y[0] == foodY )) {
 
             dots++;
-            locateApple();
+            locateFruit();
             score += 50;
             foodCounter++;
             
@@ -275,7 +275,7 @@ public class Board extends JPanel implements ActionListener {
         }
     }
 
-    private void locateApple() {
+    private void locateFruit() {
 
     	Random rand = new Random();
     	
@@ -302,7 +302,7 @@ public class Board extends JPanel implements ActionListener {
 
             checkCollision();
             checkBonus();
-            checkApple();
+            checkFruit();
             move();
         }
 

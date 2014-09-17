@@ -10,6 +10,7 @@ public class Application extends JFrame {
 
         add(new Board());
         
+        
         setResizable(false);
         pack();
         
