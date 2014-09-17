@@ -63,7 +63,7 @@ public class Board extends JPanel implements ActionListener {
 
         setPreferredSize(new Dimension(windowWidth, windowHeight));
         loadImages();
-        inGame();
+        whilePlaying();
         gameStart = System.nanoTime();
     }
 
@@ -82,7 +82,7 @@ public class Board extends JPanel implements ActionListener {
         border = borderImg.getImage();
     }
 
-    private void inGame() {
+    private void whilePlaying() {
 
         dots = 3;
 
